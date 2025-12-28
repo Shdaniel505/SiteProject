@@ -2,11 +2,19 @@
 {
     public class UserInRole
     {
-        public long Id { get; set; }
-        public virtual User user { get; set; }
-        public long UserId { get; set; }
-        public virtual Role role { get; set; }
-        public long RoleId { get; set; }
+        public long UserId { get; private set; }
+        public User User { get; private set; } = null!;
+
+        public long RoleId { get; private set; }
+        public Role Role { get; private set; } = null!;
+
+        private UserInRole() { } 
+
+        public UserInRole(long userId, long roleId)
+        {
+            UserId = userId;
+            RoleId = roleId;
+        }
 
 
     }

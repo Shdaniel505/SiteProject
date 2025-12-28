@@ -11,13 +11,13 @@ namespace Market.Application.Interfaces
 {
     public interface IDataBaseContext
     {
-        DbSet<User> Users { get; set; }
-        DbSet<Role> Roles { get; set; }
-        DbSet<UserInRole> UserInRoles { get; set; }
+        DbSet<User> Users { get; }
+        DbSet<Role> Roles { get; }
+        DbSet<UserInRole> UserInRoles { get; }
+        DbSet<Category> Categories { get; }
+        DbSet<Product> Products { get; }
+        DbSet<ProductImage> ProductImages { get; }
 
-        int SaveChanges();
-        int SaveChanges(bool acceptAllChangesOnSuccess);
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
-        Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken());
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

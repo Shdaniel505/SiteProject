@@ -1,3 +1,4 @@
+using Market.Application.Interfaces;
 using Market.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<DataBaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IDataBaseContext>(sp => sp.GetRequiredService<DataBaseContext>());
+
 
 
 builder.Services.AddEndpointsApiExplorer();

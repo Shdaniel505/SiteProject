@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Market.Infrastructure.Configurations
+{
+    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    {
+        public void Configure(EntityTypeBuilder<Category> builder)
+        {
+            builder.ToTable("Categories");
+
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Title)
+                .HasMaxLength(200)
+                .IsRequired();
+
+            builder.Property(x => x.IsActive)
+                .IsRequired();
+
+            builder.HasOne(x => x.Parent)
+                .WithMany(x => x.Children)
+                .HasForeignKey(x => x.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(x => x.CreatedAtUtc).IsRequired();
+            builder.Property(x => x.UpdatedAtUtc).IsRequired();
+
+            builder.HasIndex(x => x.ParentId);
+        }
+    }
+}
