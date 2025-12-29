@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Market.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -34,6 +37,12 @@ namespace Market.Infrastructure.Configurations
 
             builder.Property(x => x.CreatedAtUtc).IsRequired();
             builder.Property(x => x.UpdatedAtUtc).IsRequired();
+
+            builder.HasIndex(x => new { x.ProductId, x.IsMain })
+                .IsUnique()
+                .HasFilter("[IsMain] = 1");
+
+            builder.HasIndex(x => new { x.ProductId, x.SortOrder }).IsUnique();
         }
     }
 }

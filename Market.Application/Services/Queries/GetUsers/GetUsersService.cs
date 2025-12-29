@@ -1,5 +1,5 @@
-﻿using Market.Application.Interfaces;
-using Common;
+﻿using Common;
+using Market.Application.Interfaces;
 
 namespace Market.Application.Services.Queries.GetUsers
 {
