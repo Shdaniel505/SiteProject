@@ -10,7 +10,6 @@ namespace Market.Domain.Entities
         public long ProductId { get; private set; }
         public Product Product { get; private set; } = null!;
         public string Url { get; private set; } = null!;
-        public string? Alt { get; private set; }
         public int SortOrder { get; private set; }
         public bool IsMain { get; private set; }
 
@@ -20,7 +19,6 @@ namespace Market.Domain.Entities
         {
             ProductId = productId;
             SetUrl(url);
-            SetAlt(alt);
             SortOrder = sortOrder;
             IsMain = isMain;
         }
@@ -30,12 +28,6 @@ namespace Market.Domain.Entities
             url = (url ?? "").Trim();
             if (url.Length < 5) throw new ArgumentException("Image Url is invalid.");
             Url = url;
-            Touch();
-        }
-
-        public void SetAlt(string? alt)
-        {
-            Alt = string.IsNullOrWhiteSpace(alt) ? null : alt.Trim();
             Touch();
         }
 

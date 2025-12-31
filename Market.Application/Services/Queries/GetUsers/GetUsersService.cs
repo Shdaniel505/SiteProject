@@ -1,5 +1,6 @@
 ﻿using Common;
 using Market.Application.Interfaces;
+using Market.Domain.Entities;
 
 namespace Market.Application.Services.Queries.GetUsers
 {
