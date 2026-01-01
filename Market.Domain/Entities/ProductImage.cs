@@ -15,7 +15,7 @@ namespace Market.Domain.Entities
 
         private ProductImage() { }
 
-        public ProductImage(long productId, string url, string? alt = null, int sortOrder = 0, bool isMain = false)
+        public ProductImage(long productId, string url, int sortOrder = 0, bool isMain = false)
         {
             ProductId = productId;
             SetUrl(url);

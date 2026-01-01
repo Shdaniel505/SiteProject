@@ -31,7 +31,8 @@ namespace Market.Infrastructure.Configurations
                 .IsRequired();
 
             builder.Property(x => x.IsActive)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValue(true);
 
             builder.Property(x => x.CreatedAtUtc)
                 .IsRequired();

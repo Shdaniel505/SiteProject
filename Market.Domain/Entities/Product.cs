@@ -10,6 +10,8 @@ namespace Market.Domain.Entities
         public string Title { get; private set; } = null!;
         public decimal Price { get; private set; }
         public bool IsActive { get; private set; } = true;
+        public string? Description { get; private set; }
+        public int Stock {  get; private set; }
         public long CategoryId { get; private set; }
         public Category Category { get; private set; } = null!;
 
@@ -17,10 +19,12 @@ namespace Market.Domain.Entities
 
         private Product() { }
 
-        public Product(string title, decimal price, long categoryId)
+        public Product(string title, decimal price, long categoryId, string? description, int stock)
         {
             SetTitle(title);
             SetPrice(price);
+            SetDescription(description);
+            SetStock(Stock);
             CategoryId = categoryId;
         }
 
@@ -36,6 +40,33 @@ namespace Market.Domain.Entities
         {
             if (price < 0) throw new ArgumentException("Price cannot be negative.");
             Price = price;
+            Touch();
+        }
+
+        public void SetDescription(string description)
+        { 
+            description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
+            Touch();
+        }
+
+        public void SetStock(int stock)
+        {
+            if (stock < 0) throw new ArgumentException("Stock cannot be negative.");
+            Stock = stock;
+            Touch();
+        }
+        public void IncreaseStock(int amount)
+        {
+            if (amount <= 0) throw new ArgumentException("Amount must be positive.");
+            Stock += amount;
+            Touch();
+        }
+
+        public void DecreaseStock(int amount)
+        {
+            if (amount <= 0) throw new ArgumentException("Amount must be positive.");
+            if (Stock - amount < 0) throw new InvalidOperationException("Insufficient stock.");
+            Stock -= amount;
             Touch();
         }
 

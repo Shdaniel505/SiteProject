@@ -24,6 +24,9 @@ namespace Market.Infrastructure.Configurations
                 .WithMany(x => x.UserInRoles)
                 .HasForeignKey(x => x.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(x => x.RoleId);
+
         }
     }
 }

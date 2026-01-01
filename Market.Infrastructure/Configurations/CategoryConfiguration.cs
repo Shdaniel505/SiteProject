@@ -20,7 +20,8 @@ namespace Market.Infrastructure.Configurations
                 .IsRequired();
 
             builder.Property(x => x.IsActive)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValue(true);
 
             builder.HasOne(x => x.Parent)
                 .WithMany(x => x.Children)
@@ -31,6 +32,8 @@ namespace Market.Infrastructure.Configurations
             builder.Property(x => x.UpdatedAtUtc).IsRequired();
 
             builder.HasIndex(x => x.ParentId);
+            builder.HasIndex(x => new { x.ParentId, x.Title }).IsUnique();
+
         }
     }
 }

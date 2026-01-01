@@ -24,7 +24,8 @@ namespace Market.Infrastructure.Configurations
                 .IsRequired();
 
             builder.Property(x => x.IsActive)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValue(true);
 
             builder.HasOne(x => x.Category)
                 .WithMany(x => x.Products)
