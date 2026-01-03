@@ -9,7 +9,8 @@ namespace Market.Infrastructure.UnitOfWork
     {
         private readonly DataBaseContext _db;
 
-        public UnitOfWork(DataBaseContext db,
+        public UnitOfWork(
+            DataBaseContext db,
             ICategoryRepository categories,
             IProductRepository products)
         {

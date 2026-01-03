@@ -18,7 +18,7 @@ namespace Market.Infrastructure.Repositories
             _set = db.Set<TEntity>();
         }
 
-        public IQueryable<TEntity> Query() => _set.AsQueryable();
+        public IQueryable<TEntity> Query() => _set;
 
         public async Task<TEntity?> GetByIdAsync(long id, CancellationToken ct = default)
             => await _set.FindAsync([id], ct);
@@ -29,8 +29,7 @@ namespace Market.Infrastructure.Repositories
         public async Task AddAsync(TEntity entity, CancellationToken ct = default)
             => await _set.AddAsync(entity, ct);
 
-        public void Update(TEntity entity) => _set.Update(entity);
-
-        public void Remove(TEntity entity) => _set.Remove(entity);
+        public void Remove(TEntity entity)
+            => _set.Remove(entity);
     }
 }

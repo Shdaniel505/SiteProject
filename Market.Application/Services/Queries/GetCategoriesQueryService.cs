@@ -1,4 +1,5 @@
 ﻿using Market.Application.Interfaces;
+using Market.Application.Services.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,21 +7,21 @@ using System.Text;
 
 namespace Market.Application.Services.Queries
 {
-    public sealed class CategoryQueryService
+    public sealed class GetCategoriesQueryService
     {
         private readonly IDataBaseContext _db;
 
-        public CategoryQueryService(IDataBaseContext db)
+        public GetCategoriesQueryService(IDataBaseContext db)
         {
             _db = db;
         }
 
-        public async Task<List<CategoryListItemDto>> GetAllAsync()
+        public async Task<List<CategoryDto>> ExecuteAsync()
         {
             return await _db.Categories
                 .AsNoTracking()
-                .OrderBy(x => x.Title)
-                .Select(x => new CategoryListItemDto
+                .OrderBy(x => x.Id)
+                .Select(x => new CategoryDto
                 {
                     Id = x.Id,
                     Title = x.Title,
