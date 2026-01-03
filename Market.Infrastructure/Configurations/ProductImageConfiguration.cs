@@ -19,9 +19,6 @@ namespace Market.Infrastructure.Configurations
                 .HasMaxLength(1000)
                 .IsRequired();
 
-            builder.Property(x => x.Alt)
-                .HasMaxLength(250);
-
             builder.Property(x => x.SortOrder)
                 .IsRequired();
 
