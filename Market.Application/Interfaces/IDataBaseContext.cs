@@ -11,6 +11,9 @@ namespace Market.Application.Interfaces
         DbSet<Category> Categories { get; }
         DbSet<Product> Products { get; }
         DbSet<ProductImage> ProductImages { get; }
+        DbSet<User> Users { get; }
+        DbSet<Role> Roles { get; }
+        DbSet<UserInRole> UserInRoles { get; }
 
         Task<int> SaveChangesAsync(CancellationToken ct = default);
     }

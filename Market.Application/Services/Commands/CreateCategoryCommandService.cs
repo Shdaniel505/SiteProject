@@ -11,34 +11,29 @@ namespace Market.Application.Services.Commands
     public sealed class CreateCategoryCommandService
     {
         private readonly IUnitOfWork _uow;
+        public CreateCategoryCommandService(IUnitOfWork uow) => _uow = uow;
 
-        public CreateCategoryCommandService(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
-
-        public async Task<Result> ExecuteAsync(CreateCategoryDto dto)
+        public async Task<Result> ExecuteAsync(CreateCategoryDto dto, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(dto.Title))
                 return Result.Fail("Title is required");
 
+            var title = dto.Title.Trim();
+
             if (dto.ParentId.HasValue)
             {
-                var parentExists = await _uow.Categories
-                    .ExistsAsync(x => x.Id == dto.ParentId.Value);
+                var parentExists = await _uow.Categories.ExistsAsync(x => x.Id == dto.ParentId.Value, ct);
                 if (!parentExists)
                     return Result.Fail("Parent category not found");
             }
 
-            var duplicate = await _uow.Categories
-                .TitleExistsAsync(dto.Title.Trim(), dto.ParentId);
+            var duplicate = await _uow.Categories.TitleExistsAsync(title, dto.ParentId, ct);
             if (duplicate)
                 return Result.Fail("Duplicate category title");
 
-            await _uow.Categories.AddAsync(
-                new Category(dto.Title.Trim(), dto.ParentId));
+            await _uow.Categories.AddAsync(new Category(title, dto.ParentId), ct);
+            await _uow.SaveChangesAsync(ct);
 
-            await _uow.SaveChangesAsync();
             return Result.Ok();
         }
     }

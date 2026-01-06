@@ -8,7 +8,10 @@ namespace Market.Application.Interfaces
     {
         ICategoryRepository Categories { get; }
         IProductRepository Products { get; }
+        IProductImageRepository ProductImages { get; }
 
         Task<int> SaveChangesAsync(CancellationToken ct = default);
+
+        Task ExecuteInTransactionAsync(Func<CancellationToken, Task> action, CancellationToken ct = default);
     }
 }
