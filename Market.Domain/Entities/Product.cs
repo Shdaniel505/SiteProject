@@ -24,7 +24,7 @@ namespace Market.Domain.Entities
             SetTitle(title);
             SetPrice(price);
             SetDescription(description);
-            SetStock(Stock);
+            SetStock(stock);
             CategoryId = categoryId;
         }
 
@@ -45,7 +45,7 @@ namespace Market.Domain.Entities
 
         public void SetDescription(string description)
         { 
-            description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
+            Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
             Touch();
         }
 

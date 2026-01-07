@@ -15,6 +15,12 @@ namespace Market.Infrastructure.Configurations
 
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Description)
+                .HasMaxLength(2000);
+
+            builder.Property(x => x.Stock)
+                .IsRequired();
+
             builder.Property(x => x.Title)
                 .HasMaxLength(250)
                 .IsRequired();

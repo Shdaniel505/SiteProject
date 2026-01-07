@@ -9,5 +9,6 @@ namespace Market.Application.Interfaces
     {
         Task<bool> ProductExistsAsync(long productId, CancellationToken ct = default);
         Task<ProductImage?> GetByIdForProductAsync(long imageId, long productId, CancellationToken ct = default);
+        Task UnsetAllMainAsync(long productId, CancellationToken token);
     }
 }

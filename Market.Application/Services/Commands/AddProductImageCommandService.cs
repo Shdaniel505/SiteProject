@@ -1,6 +1,7 @@
 ﻿using Market.Application.Common;
 using Market.Application.Interfaces;
 using Market.Application.Services.DTO;
+using Market.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,37 +16,34 @@ namespace Market.Application.Services.Commands
 
         public async Task<Result> ExecuteAsync(AddProductImageDto dto, CancellationToken ct = default)
         {
-            if (dto.ProductId <= 0) return Result.Fail("Invalid productId");
-            if (string.IsNullOrWhiteSpace(dto.Url)) return Result.Fail("Url is required");
-            if (dto.SortOrder < 0) return Result.Fail("SortOrder cannot be negative");
+            if (dto.ProductId <= 0)
+                return Result.Failure("VALIDATION_ERROR", "Invalid productId");
 
-            var url = dto.Url.Trim();
-            var alt = dto.Alt?.Trim();
+            if (string.IsNullOrWhiteSpace(dto.Url))
+                return Result.Failure("VALIDATION_ERROR", "Url is required");
 
-            var productExists = await _uow.ProductImages.ProductExistsAsync(dto.ProductId, ct);
-            if (!productExists)
-                return Result.Fail("Product not found");
+            if (dto.SortOrder < 0)
+                return Result.Failure("VALIDATION_ERROR", "SortOrder cannot be negative");
+
+            var product = await _uow.Products.GetByIdAsync(dto.ProductId, ct);
+            if (product is null)
+                return Result.Failure("NOT_FOUND", "Product not found");
 
             await _uow.ExecuteInTransactionAsync(async token =>
             {
                 if (dto.IsMain)
-                {
-                    // همه‌ی عکس‌های اصلی قبلی رو false کن
-                    var mains = await _uow.ProductImages.Query()
-                        .Where(x => x.ProductId == dto.ProductId && x.IsMain)
-                        .ToListAsync(token);
+                    await _uow.ProductImages.UnsetAllMainAsync(dto.ProductId, token);
 
-                    foreach (var m in mains)
-                        m.SetIsMain(false);
-                }
+                var image = new ProductImage(
+                    productId: dto.ProductId,
+                    url: dto.Url.Trim(),
+                    sortOrder: dto.SortOrder,
+                    isMain: dto.IsMain);
 
-                var image = new ProductImage(dto.ProductId, url, alt, dto.SortOrder, dto.IsMain);
                 await _uow.ProductImages.AddAsync(image, token);
-
-                await _uow.SaveChangesAsync(token);
             }, ct);
 
-            return Result.Ok();
+            return Result.Success();
         }
     }
 }

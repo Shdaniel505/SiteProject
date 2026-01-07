@@ -8,7 +8,6 @@ namespace Market.Application.Services.DTO
     {
         public long ProductId { get; set; }
         public string Url { get; set; } = null!;
-        public string? Alt { get; set; }
         public int SortOrder { get; set; } = 0;
         public bool IsMain { get; set; } = false;
     }

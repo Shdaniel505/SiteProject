@@ -1,5 +1,6 @@
 ﻿using Market.Application.Interfaces;
 using Market.Application.Services.DTO;
+using Market.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,6 @@ namespace Market.Application.Services.Queries
                         {
                             Id = i.Id,
                             Url = i.Url,
-                            Alt = i.Alt,
                             SortOrder = i.SortOrder,
                             IsMain = i.IsMain
                         }).ToList()

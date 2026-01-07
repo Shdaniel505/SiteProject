@@ -1,6 +1,6 @@
 ﻿using Market.Application.Common;
 using Market.Application.Interfaces;
-using Market.Application.Services.DTO.Create;
+using Market.Application.Services.DTO;
 using Market.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,25 +16,24 @@ namespace Market.Application.Services.Commands
         public async Task<Result> ExecuteAsync(CreateCategoryDto dto, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(dto.Title))
-                return Result.Fail("Title is required");
+                return Result.Failure("VALIDATION_ERROR", "Title is required");
 
-            var title = dto.Title.Trim();
-
-            if (dto.ParentId.HasValue)
+            if (dto.ParentId is not null && dto.ParentId > 0)
             {
-                var parentExists = await _uow.Categories.ExistsAsync(x => x.Id == dto.ParentId.Value, ct);
-                if (!parentExists)
-                    return Result.Fail("Parent category not found");
+                var parent = await _uow.Categories.GetByIdAsync(dto.ParentId.Value, ct);
+                if (parent is null)
+                    return Result.Failure("NOT_FOUND", "Parent category not found");
             }
 
-            var duplicate = await _uow.Categories.TitleExistsAsync(title, dto.ParentId, ct);
-            if (duplicate)
-                return Result.Fail("Duplicate category title");
+            var exists = await _uow.Categories.TitleExistsAsync(dto.Title.Trim(), dto.ParentId, ct);
+            if (exists)
+                return Result.Failure("DUPLICATE", "Duplicate category title");
 
-            await _uow.Categories.AddAsync(new Category(title, dto.ParentId), ct);
+            var category = new Category(dto.Title.Trim(), dto.ParentId);
+            await _uow.Categories.AddAsync(category, ct);
             await _uow.SaveChangesAsync(ct);
 
-            return Result.Ok();
+            return Result.Success();
         }
     }
 }
